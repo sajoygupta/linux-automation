@@ -1,21 +1,27 @@
-# 📧 Complete Email Server Troubleshooting & Relay Setup Guide
+# 📧 Email Troubleshooting Guide
 
-## 1. Overview & Problem Statement
-* **Issue:** High mail queue, delivery failures, or IP blacklisting (e.g., Spamhaus RBL) caused by compromised cPanel accounts or improper outbound routing.
-* **Objective:** Audit mail logs, clear spammed queues, route outbound traffic safely via SmartHost (SendGrid), and request RBL delisting.
+## Commands Checklist
 
----
+```bash
+# Check RBL Status
+host 4.3.2.1.zen.spamhaus.org
 
-## 2. Diagnostics & Blacklist Check
-* **Check RBL Status (DNS lookup):**
-  ```bash
-  host 4.3.2.1.zen.spamhaus.org
+# Test Outbound SMTP Port
 nc -zv smtp.sendgrid.net 587
+
+# Live Log Stream
 tail -f /var/log/exim_mainlog
+
+# Search Archived Logs
 zgrep "domain.com" /var/log/exim_mainlog* | grep "<=" | head -n 30
+
+# Exim Queue
 exim -bpc
 exim -bp
 exim -qff
 exiqgrep -z -i | xargs exim -Mrm
+
+# Restart Exim
 systemctl restart exim
 /scripts/restartsrv_exim
+```
