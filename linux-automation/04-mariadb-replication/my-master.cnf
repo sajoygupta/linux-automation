@@ -1,0 +1,12 @@
+[mysqld]
+# Server-ID MUST be unique for all servers in replication
+server-id = 1
+
+# Binary logging is required for Master
+log-bin = mysql-bin
+
+# Row-based logging for high precision
+binlog-format = ROW
+
+# Automatically expire binary logs after 7 days
+binlog_expire_logs_seconds = 604800
